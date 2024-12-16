@@ -21,10 +21,13 @@ class UserCrudResource extends JsonResource
             "id" => $this->id,
             "name" => $this->name,
             "email" => $this->email,
-            "role" => $this->role,
+            "location_id" => $this->location_id,
+            "location" => new LocationResource($this->location),
+            "role_id" => $this->role_id,
+            "role" => new RoleResource($this->role),
             "username" => $this->username,
-            'created_at' => (new Carbon($this->created_at))->format('Y-m-d H:i:s'),
-            'updated_at' => (new Carbon($this->updated_at))->format('Y-m-d H:i:s'),
+            "created_at" => (new Carbon($this->created_at))->format("Y-m-d H:i:s"),
+            "updated_at" => (new Carbon($this->updated_at))->format("Y-m-d H:i:s"),
         ];
     }
 }

@@ -23,10 +23,11 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        error_log('a');
         $user = $this->route("user");
         return [
             "name" => ["required", "string", "max:255"],
+            "role_id" => ["required", 'exists:roles,id'],
+            "location_id" => ["required", 'exists:locations,id'],
             "username" => [
                 "required",
                 "string",
@@ -36,11 +37,6 @@ class UpdateUserRequest extends FormRequest
                 "required",
                 "email",
                 Rule::unique('users')->ignore($user->id),
-            ],
-            "role" => [
-                "required",
-                "string",
-                Rule::in('user', 'admin'),
             ],
             "password" => [
                 'nullable',

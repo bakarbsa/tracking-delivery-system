@@ -24,9 +24,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'username',
-        'role',
+        'role_id',
+        'location_id',
         'password',
-        'email_verified_at'
+        'email_verified_at',
     ];
 
     /**
@@ -50,5 +51,15 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+    
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
     }
 }

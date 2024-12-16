@@ -11,7 +11,6 @@ use Inertia\Inertia;
 
 Route::redirect('/', '/dashboard');
 
-// ALL ROUTE
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
@@ -22,14 +21,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('task', TaskController::class);
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', 'verified', 'can:user_edit')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// ADMIN ROUTE
-Route::middleware(['auth', 'can:admin'])->group(function () {
+Route::middleware(['auth', 'verified', 'can:user_read'])->group(function () {
     Route::resource('user', UserController::class);
 });
 

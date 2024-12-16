@@ -6,6 +6,10 @@ use App\Http\Resources\UserCrudResource;
 use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Resources\LocationResource;
+use App\Http\Resources\RoleResource;
+use App\Models\Location;
+use App\Models\Role;
 
 class UserController extends Controller
 {
@@ -32,9 +36,12 @@ class UserController extends Controller
         }
 
         if (request(("role"))) {
-            $query->where("role", "like", "%".request("role")."%");
+            $query->whereRelation("role", "title", "like", "%".request("role")."%");
         }
-
+        
+        if (request(("location"))) {
+            $query->whereRelation("location", "name", "like", "%".request("location")."%");
+        }
 
         $users = $query->orderBy($sortField, $sortDirection)
             ->paginate(10)
@@ -52,7 +59,13 @@ class UserController extends Controller
      */
     public function create()
     {
-        return inertia("User/Create");
+        $locations = Location::query()->orderBy('name', 'asc')->get();
+        $roles = Role::query()->orderBy('title', 'asc')->get();
+
+        return inertia("User/Create", [
+            'roles' => RoleResource::collection($roles),
+            'locations' => LocationResource::collection($locations),
+        ]);
     }
 
     /**
@@ -82,8 +95,13 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $locations = Location::query()->orderBy('name', 'asc')->get();
+        $roles = Role::query()->orderBy('title', 'asc')->get();
+
         return inertia('User/Edit', [
             'user' => new UserCrudResource($user),
+            'roles' => RoleResource::collection($roles),
+            'locations' => LocationResource::collection($locations),
         ]);
     }
 
@@ -92,7 +110,6 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        error_log('b');
         $data = $request->validated();
         $password = $data['password'] ?? null;
         
@@ -102,7 +119,7 @@ class UserController extends Controller
             unset($data['password']);
         }
         $user->update($data);
-
+        
         return to_route('user.index')
             ->with('success', "User \"$user->name\" was updated");
     }

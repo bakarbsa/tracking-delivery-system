@@ -47,6 +47,7 @@ export default function Index({ auth, users, queryParams = null, success }) {
 
   return (
     <AuthenticatedLayout
+      auth={auth}
       user={auth.user}
       header={
         <div className="flex justify-between items-center">
@@ -114,6 +115,15 @@ export default function Index({ auth, users, queryParams = null, success }) {
                       </TableHeading>
 
                       <TableHeading
+                        name="location"
+                        sort_field={queryParams.sort_field}
+                        sort_direction={queryParams.sort_direction}
+                        sortChanged={sortChanged}
+                      >
+                        Location
+                      </TableHeading>
+
+                      <TableHeading
                         name="role"
                         sort_field={queryParams.sort_field}
                         sort_direction={queryParams.sort_direction}
@@ -171,6 +181,17 @@ export default function Index({ auth, users, queryParams = null, success }) {
                         />
                       </th>
                       <th className="px-3 py-3">
+                        <TextInput
+                          className="w-full"
+                          defaultValue={queryParams.location}
+                          placeholder="Location"
+                          onBlur={(e) =>
+                            searchFieldChanged("location", e.target.value)
+                          }
+                          onKeyPress={(e) => onKeyPress("location", e)}
+                        />
+                      </th>
+                      <th className="px-3 py-3">
                         <SelectInput
                           className="w-full"
                           defaultValue={queryParams.role}
@@ -201,9 +222,10 @@ export default function Index({ auth, users, queryParams = null, success }) {
                           {user.username}
                         </th>
                         <td className="px-3 py-2">{user.email}</td>
+                        <td className="px-3 py-2">{user.location.name}</td>
                         <td className="px-3 py-2 text-gray-100 text-nowrap">
                           <span className={"px-2 py-1 rounded text-gray-100 "}>
-                            {USER_ROLE_MAP[user.role]}
+                            {USER_ROLE_MAP[user.role.title]}
                           </span>
                         </td>
                         <td className="px-3 py-2 text-nowrap">

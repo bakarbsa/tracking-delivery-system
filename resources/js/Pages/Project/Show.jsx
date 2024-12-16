@@ -8,6 +8,7 @@ import TasksTable from "../Task/TasksTable";
 export default function Show({ auth, success, project, tasks, queryParams }) {
   return (
     <AuthenticatedLayout
+      auth={auth}
       user={auth.user}
       header={
         <div className="flex items-center justify-between">

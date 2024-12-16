@@ -5,17 +5,18 @@ import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 
-export default function Create({ auth, user }) {
+export default function Create({ auth, user, roles, locations }) {
   const { data, setData, post, errors, reset } = useForm({
     name: user.name || "",
     email: user.email || "",
     username: user.username || "",
-    role: user.role || "",
+    location_id: user.location.id || "",
+    role_id: user.role.id || "",
     password: "",
     password_confirmation: "",
     _method: "PUT",
   });
-
+  
   const onSubmit = (e) => {
     e.preventDefault();
 
@@ -24,6 +25,7 @@ export default function Create({ auth, user }) {
 
   return (
     <AuthenticatedLayout
+      auth={auth}
       user={auth.user}
       header={
         <div className="flex justify-between items-center">
@@ -89,21 +91,45 @@ export default function Create({ auth, user }) {
               </div>
 
               <div className="mt-4">
-                <InputLabel htmlFor="role" value="Role" />
+                <InputLabel htmlFor="location_id" value="Location" />
 
                 <SelectInput
-                  name="role"
-                  id="role"
-                  value={data.role}
+                  name="location_id"
+                  id="location_id"
+                  value={data.location_id}
                   className="mt-1 block w-full"
-                  onChange={(e) => setData("role", e.target.value)}
+                  onChange={(e) => setData("location_id", e.target.value)}
                 >
-                  <option value="">Select Role</option>
-                  <option value="user">User</option>
-                  <option value="admin">Admin</option>
+                  <option value="">Select Location</option>
+                  {locations.data.map((location) => (
+                    <option value={location.id} key={location.id}>
+                      {location.name}
+                    </option>
+                  ))}
                 </SelectInput>
 
-                <InputError message={errors.role} className="mt-2" />
+                <InputError message={errors.location_id} className="mt-2" />
+              </div>
+
+              <div className="mt-4">
+                <InputLabel htmlFor="role_id" value="Role" />
+
+                <SelectInput
+                  name="role_id"
+                  id="role_id"
+                  value={data.role_id}
+                  className="mt-1 block w-full"
+                  onChange={(e) => setData("role_id", e.target.value)}
+                >
+                  <option value="">Select Role</option>
+                  {roles.data.map((role) => (
+                    <option value={role.id} key={role.id}>
+                      {role.title}
+                    </option>
+                  ))}
+                </SelectInput>
+
+                <InputError message={errors.role_id} className="mt-2" />
               </div>
 
               <div className="mt-4">

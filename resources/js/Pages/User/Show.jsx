@@ -8,6 +8,7 @@ import TasksTable from '../Task/TasksTable';
 export default function Show({ auth, user, tasks, queryParams }) {
   return (
     <AuthenticatedLayout
+      auth={auth}
       user={auth.user}
       header={
         <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>

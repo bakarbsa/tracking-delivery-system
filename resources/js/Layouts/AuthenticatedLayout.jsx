@@ -6,7 +6,7 @@ import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
 import { USER_ROLE_MAP } from "@/constants";
 
-export default function AuthenticatedLayout({ user, header, children }) {
+export default function AuthenticatedLayout({ auth, user, header, children }) {
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
   
@@ -44,7 +44,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                 <NavLink
                   href={route("user.index")}
                   active={route().current("user.index")}
-                  className={user.role == 'admin' ? '' : 'hidden'}
+                  className={auth?.can.user_read ? "" : "hidden"}
                 >
                   Users
                 </NavLink>
@@ -58,6 +58,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
             </div>
 
             <div className="hidden sm:flex sm:items-center sm:ms-6">
+              <div className="text-sm text-blue-700 font-bold bg-blue-200 py-1 px-3 rounded">{USER_ROLE_MAP[user.role.title]}</div>
               <div className="ms-3 relative">
                 <Dropdown>
                   <Dropdown.Trigger>

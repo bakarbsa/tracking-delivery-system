@@ -9,6 +9,7 @@ import {
 export default function Show({ auth, task }) {
   return (
     <AuthenticatedLayout
+      auth={auth}
       user={auth.user}
       header={
         <div className="flex items-center justify-between">

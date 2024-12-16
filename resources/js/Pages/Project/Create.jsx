@@ -23,6 +23,7 @@ export default function Create({ auth }) {
 
   return (
     <AuthenticatedLayout
+      auth={auth}
       user={auth.user}
       header={
         <div className="flex justify-between items-center">
